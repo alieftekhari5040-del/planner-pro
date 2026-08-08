@@ -195,30 +195,23 @@ h1, h2, h3, .fa-balance {
   background: rgba(24, 24, 66, 0.9);
 }
 
-/* Daily schedule: fixed time track + fluid note + reserved delete action.
-   A grid avoids the old width:100% flex collision that made the time field
-   swallow the row and pushed the other controls outside the card. */
+/* Daily schedule: large check target + fluid note + reserved delete action. */
 .schedule-row {
   display: grid;
-  grid-template-columns: 6.25rem minmax(0, 1fr) 1.25rem;
+  grid-template-columns: 2.75rem minmax(0, 1fr) 1.25rem;
   align-items: center;
   gap: 0.5rem;
   direction: rtl;
 }
-.schedule-time,
 .schedule-note {
   width: 100%;
-}
-.schedule-time {
-  font-variant-numeric: tabular-nums;
-  unicode-bidi: isolate;
 }
 .schedule-delete {
   justify-self: center;
 }
 @media (min-width: 640px) {
   .schedule-row {
-    grid-template-columns: 7.25rem minmax(0, 1fr) 1.5rem;
+    grid-template-columns: 2.75rem minmax(0, 1fr) 1.5rem;
   }
 }
 

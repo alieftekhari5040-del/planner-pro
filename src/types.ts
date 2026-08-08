@@ -1,7 +1,9 @@
 export interface ScheduleRow {
   id: string;
-  time: string;
   note: string;
+  done?: boolean;
+  /** Kept only so previously saved rows remain backward-compatible. */
+  time?: string;
 }
 
 export interface Task {

@@ -6,13 +6,27 @@ import { faDigits } from '../lib/jalali';
 import { SectionTitle, EmptyState } from './ui';
 import { playFlip, playSuccess } from '../lib/sound';
 
-function Checkbox({ checked, onToggle }: { checked: boolean; onToggle: () => void }) {
+function Checkbox({
+  checked,
+  onToggle,
+  ariaLabel = 'تغییر وضعیت',
+  large = false,
+}: {
+  checked: boolean;
+  onToggle: () => void;
+  ariaLabel?: string;
+  large?: boolean;
+}) {
   return (
     <button
+      type="button"
       role="checkbox"
       aria-checked={checked}
+      aria-label={ariaLabel}
       onClick={onToggle}
-      className="relative h-5 w-5 shrink-0 rounded-md border transition-all"
+      className={`relative shrink-0 border transition-all ${
+        large ? 'h-11 w-11 rounded-xl' : 'h-5 w-5 rounded-md'
+      }`}
       style={{
         borderColor: checked ? 'transparent' : 'var(--line)',
         background: checked
@@ -23,7 +37,7 @@ function Checkbox({ checked, onToggle }: { checked: boolean; onToggle: () => voi
     >
       <svg
         viewBox="0 0 24 24"
-        className="h-3.5 w-3.5 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white"
+        className={`${large ? 'h-5 w-5' : 'h-3.5 w-3.5'} absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white`}
         fill="none"
         stroke="currentColor"
         strokeWidth="3"
@@ -42,8 +56,8 @@ const INITIAL_SCHEDULE_ROWS = 3;
 function starterSchedule(): ScheduleRow[] {
   return Array.from({ length: INITIAL_SCHEDULE_ROWS }, () => ({
     id: uid(),
-    time: '',
     note: '',
+    done: false,
   }));
 }
 
@@ -65,7 +79,16 @@ export default function TodayView({ iso }: { iso: string }) {
     });
 
   const addSchedule = () => {
-    upd((d) => d.schedule.push({ id: uid(), time: '', note: '' }));
+    upd((d) => d.schedule.push({ id: uid(), note: '', done: false }));
+  };
+
+  const toggleSchedule = (id: string) => {
+    const willDone = !day.schedule.find((row) => row.id === id)?.done;
+    upd((d) => {
+      const row = d.schedule.find((item) => item.id === id);
+      if (row) row.done = willDone;
+    });
+    if (willDone) playFlip();
   };
 
   const checkAllDone = (tasks: Task[]) =>
@@ -94,28 +117,25 @@ export default function TodayView({ iso }: { iso: string }) {
           {day.schedule.length === 0 && (
             <EmptyState title="هنوز برنامه‌ای نداری" sub="ردیفی اضافه کن تا روزت را بسازی" />
           )}
-          {day.schedule.map((row) => (
+          {day.schedule.map((row, index) => (
             <div key={row.id} className="schedule-row group-row">
-              <input
-                type="time"
-                lang="fa"
-                dir="ltr"
-                className="field schedule-time text-center"
-                value={row.time}
-                aria-label="ساعت"
-                onChange={(e) =>
-                  upd((d) => {
-                    const r = d.schedule.find((x) => x.id === row.id);
-                    if (r) r.time = e.target.value;
-                  })
-                }
+              <Checkbox
+                large
+                checked={!!row.done}
+                ariaLabel={`${row.done ? 'برداشتن تیک' : 'تیک زدن'} ردیف ${faDigits(index + 1)} برنامه`}
+                onToggle={() => toggleSchedule(row.id)}
               />
               <input
                 dir="rtl"
                 className="field schedule-note"
-                placeholder="توضیح برنامه…"
+                placeholder="برنامه‌ات را بنویس…"
                 value={row.note}
                 aria-label="یادداشت برنامه"
+                style={{
+                  textDecoration: row.done ? 'line-through' : 'none',
+                  opacity: row.done ? 0.55 : 1,
+                  color: row.done ? 'var(--muted)' : 'var(--text)',
+                }}
                 onChange={(e) =>
                   upd((d) => {
                     const r = d.schedule.find((x) => x.id === row.id);

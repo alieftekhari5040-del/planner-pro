@@ -47,18 +47,22 @@ describe('dayIsActive', () => {
     expect(dayIsActive(day({ goals: ['go'] }))).toBe(true);
   });
 
-  it('ignores blank starter rows but detects a filled schedule row', () => {
+  it('ignores blank starter rows but detects a checked or filled schedule row', () => {
     const blank = {
       ...day({}),
       schedule: [
-        { id: 's1', time: '', note: '' },
-        { id: 's2', time: '', note: '   ' },
+        { id: 's1', note: '', done: false },
+        { id: 's2', note: '   ', done: false },
       ],
     };
     expect(dayIsActive(blank)).toBe(false);
     expect(dayIsActive({
       ...blank,
-      schedule: [{ id: 's1', time: '08:30', note: '' }],
+      schedule: [{ id: 's1', note: '', done: true }],
+    })).toBe(true);
+    expect(dayIsActive({
+      ...blank,
+      schedule: [{ id: 's1', note: 'جلسه‌ی تیم', done: false }],
     })).toBe(true);
   });
 });
