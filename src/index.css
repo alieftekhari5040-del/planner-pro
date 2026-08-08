@@ -24,11 +24,35 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: 'Vazirmatn', 'Tahoma', system-ui, sans-serif;
-  line-height: 1.95;
+  line-height: 1.9;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+  /* Farsi-aware shaping: keep digits Persian, disable Latin tabular scaling */
+  font-feature-settings: 'tnum' 0, 'kern' 1;
+  font-synthesis-weight: none;
+  font-synthesis-style: none;
+  font-optical-sizing: auto;
+}
+
+/* Persian headings stay tight, avoid orphan words */
+h1, h2, h3, .fa-balance {
+  text-wrap: balance;
+  line-height: 1.5;
+}
+
+/* Justified paragraphs for long Persian prose */
+.fa-justify {
+  text-align: justify;
+  text-justify: inter-word;
+  text-align-last: right;
+}
+
+::selection {
+  background: rgba(124, 92, 255, 0.4);
+  color: #fff;
 }
 
 * {
@@ -117,14 +141,20 @@ body {
   border-radius: 16px;
 }
 
-/* English micro-label */
+/* English micro-label — uppercase + letter-spacing ONLY for Latin text.
+   Persian script must never get letter-spacing (it breaks connected letters). */
 .microlabel {
   font-family: 'Vazirmatn', sans-serif;
   font-size: 0.62rem;
   font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0;
+}
+.microlabel--en {
   text-transform: uppercase;
   letter-spacing: 0.16em;
-  color: var(--muted);
+  unicode-bidi: isolate;
+  direction: ltr;
 }
 
 /* Red glowing tick before section titles */

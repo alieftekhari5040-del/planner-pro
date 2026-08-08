@@ -49,7 +49,7 @@ export default function Footer() {
           <Logo size={30} />
           <div className="leading-tight">
             <div className="text-sm font-bold text-[#f0ecff]">روز صفر تا قله</div>
-            <div className="microlabel mt-0.5">THE ASCENT BLUEPRINT — DAILY</div>
+            <div className="microlabel microlabel--en mt-0.5">THE ASCENT BLUEPRINT — DAILY</div>
           </div>
         </div>
 

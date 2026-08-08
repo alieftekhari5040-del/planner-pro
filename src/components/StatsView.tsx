@@ -27,7 +27,10 @@ function KpiCard({
       style={{ animationDelay: `${index * 0.05}s` }}
     >
       <div className="microlabel">{label}</div>
-      <div className="mt-1 text-2xl font-black text-[#f0ecff]" style={{ direction: 'ltr', textAlign: 'left' }}>
+      <div
+        className="fa-balance mt-1 text-2xl font-black text-[#f0ecff]"
+        style={{ direction: 'ltr', textAlign: 'right' }}
+      >
         {value}
       </div>
       <div className="mt-1 text-xs font-semibold" style={{ color }}>
@@ -62,7 +65,7 @@ function ChartCard({
     <section className="glass glass--sm p-5">
       <SectionTitle>{title}</SectionTitle>
       <div className="mt-1">
-        <Microlabel>{en}</Microlabel>
+        <Microlabel en>{en}</Microlabel>
       </div>
       <div className="mt-4" dir={ltr ? 'ltr' : 'rtl'} style={ltr ? { textAlign: 'left' } : undefined}>
         {children}

@@ -58,7 +58,7 @@ export default function Header() {
           <p className="text-[0.72rem] font-medium text-[#8f8fb8]">
             هر روز یک قدم جلوتر
           </p>
-          <p className="microlabel mt-0.5">THE ASCENT BLUEPRINT</p>
+          <p className="microlabel microlabel--en mt-0.5">THE ASCENT BLUEPRINT</p>
         </div>
       </div>
 

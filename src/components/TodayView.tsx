@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { Task } from '../types';
 import { useStore } from '../store';
 import { uid } from '../lib/storage';
+import { faDigits } from '../lib/jalali';
 import { SectionTitle, EmptyState } from './ui';
 import { playFlip, playSuccess } from '../lib/sound';
 
@@ -83,6 +84,7 @@ export default function TodayView({ iso }: { iso: string }) {
             >
               <input
                 type="time"
+                lang="fa"
                 className="field w-28 shrink-0 text-center"
                 value={row.time}
                 aria-label="ساعت"
@@ -174,7 +176,8 @@ export default function TodayView({ iso }: { iso: string }) {
             />
             {day.tasks.length > 0 && (
               <p className="pt-1 text-[0.7rem] text-[#8f8fb8]">
-                {day.tasks.filter((t) => t.done).length} از {day.tasks.length} کار انجام شد
+                {faDigits(day.tasks.filter((t) => t.done).length)} از{' '}
+                {faDigits(day.tasks.length)} کار انجام شد
                 {checkAllDone(day.tasks) ? ' — همه‌چیز تمام شد 🎉' : ''}
               </p>
             )}

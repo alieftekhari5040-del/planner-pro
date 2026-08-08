@@ -17,8 +17,20 @@ export function SectionTitle({
   );
 }
 
-export function Microlabel({ children }: { children: ReactNode }) {
-  return <span className="microlabel">{children}</span>;
+export function Microlabel({
+  children,
+  en,
+  className = '',
+}: {
+  children: ReactNode;
+  en?: boolean;
+  className?: string;
+}) {
+  return (
+    <span className={`microlabel${en ? ' microlabel--en' : ''} ${className}`}>
+      {children}
+    </span>
+  );
 }
 
 /** Absolute-positioned tooltip used by the SVG charts. */
