@@ -27,10 +27,8 @@ function KpiCard({
       style={{ animationDelay: `${index * 0.05}s` }}
     >
       <div className="microlabel">{label}</div>
-      <div
-        className="fa-balance mt-1 text-2xl font-black text-[#f0ecff]"
-        style={{ direction: 'ltr', textAlign: 'right' }}
-      >
+      {/* Persian RTL (default) so number+unit strings like «۵ روز» keep correct order */}
+      <div className="fa-balance mt-1 text-2xl font-black text-[#f0ecff]">
         {value}
       </div>
       <div className="mt-1 text-xs font-semibold" style={{ color }}>

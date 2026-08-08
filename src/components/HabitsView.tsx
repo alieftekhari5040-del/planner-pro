@@ -19,7 +19,8 @@ export default function HabitsView() {
   const { data, update, setDay, getDay } = useStore();
   const [weekStart, setWeekStart] = useState(() => startOfWeekIso(todayIso()));
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [draft, setDraft] = useState('');
+  const [draft, setDraft] = useState('');        // "add custom habit" input
+  const [renameDraft, setRenameDraft] = useState(''); // "rename habit" input
   const [confirmId, setConfirmId] = useState<string | null>(null);
 
   const weekDays = daysOfWeek(weekStart);
@@ -73,7 +74,7 @@ export default function HabitsView() {
 
   const commitRename = () => {
     if (editingId) {
-      const title = draft.trim();
+      const title = renameDraft.trim();
       if (title) {
         update((d) => {
           const h = d.habits.find((x) => x.id === editingId);
@@ -83,7 +84,7 @@ export default function HabitsView() {
       }
     }
     setEditingId(null);
-    setDraft('');
+    setRenameDraft('');
   };
 
   const weeklyCount = (habitId: string) => habitDaysInWeek(data, habitId, weekStart);
@@ -187,8 +188,8 @@ export default function HabitsView() {
                       <input
                         autoFocus
                         className="field py-1 text-sm"
-                        value={draft}
-                        onChange={(e) => setDraft(e.target.value)}
+                        value={renameDraft}
+                        onChange={(e) => setRenameDraft(e.target.value)}
                         onBlur={commitRename}
                         onKeyDown={(e) => {
                           if (e.key === 'Enter') commitRename();
@@ -199,7 +200,7 @@ export default function HabitsView() {
                         className="truncate text-sm font-semibold text-[#f0ecff] hover:text-[#b9a7ff]"
                         onClick={() => {
                           setEditingId(habit.id);
-                          setDraft(habit.title);
+                          setRenameDraft(habit.title);
                         }}
                         title="برای ویرایش کلیک کن"
                       >

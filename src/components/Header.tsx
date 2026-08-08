@@ -97,7 +97,7 @@ export default function Header() {
 
         {showInstall && (
           <button
-            className="btn btn--primary hidden px-4 py-2 text-sm sm:inline-flex"
+            className="btn btn--primary px-3 py-2 text-sm sm:px-4"
             onClick={install}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">

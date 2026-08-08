@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useStore } from '../../store';
 import { completion } from '../../lib/analytics';
-import { addDaysIso, faDigits, jalaliFull, subDaysIso, todayIso } from '../../lib/jalali';
+import { faDigits, jalaliFull, subDaysIso, todayIso } from '../../lib/jalali';
 import { WEEKDAYS_SHORT } from '../../lib/constants';
 import { ChartTooltip } from '../ui';
 
@@ -23,7 +23,7 @@ export default function WeekBars() {
   const barW = Math.min(30, slot * 0.55);
   const maxH = innerH;
 
-  const tipIso = tip ? addDaysIso(tip.iso, 0) : null;
+  const tipIso = tip?.iso ?? null;
   const tipData = tipIso ? completion(getDay(tipIso)) : null;
 
   return (

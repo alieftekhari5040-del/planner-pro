@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useStore } from '../../store';
 import { completion } from '../../lib/analytics';
-import { faDigits, jalaliDay, subDaysIso, todayIso } from '../../lib/jalali';
+import { diffDays, faDigits, jalaliDay, subDaysIso, todayIso } from '../../lib/jalali';
 import { ChartTooltip } from '../ui';
 
 const W = 340;
@@ -101,7 +101,11 @@ export default function Trend30() {
       </svg>
       {tip && (
         <ChartTooltip x={tip.x} y={tip.y} visible={!!tip}>
-          <div className="font-bold">{faDigits(jalaliDay(tip.iso))} روز پیش</div>
+          <div className="font-bold">
+            {diffDays(tip.iso, today) === 0
+              ? 'امروز'
+              : `${faDigits(diffDays(tip.iso, today))} روز پیش`}
+          </div>
           <div className="text-[#b9a7ff]">{faDigits(completion(getDay(tip.iso)).pct)}٪</div>
         </ChartTooltip>
       )}

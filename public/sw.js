@@ -1,18 +1,23 @@
 /* The Ascent Blueprint — offline-first service worker */
 const CACHE = 'ascent-cache-v1';
+// Relative paths: resolve against the SW scope, so this works on subpath
+// deploys (e.g. GitHub Pages) as well as a domain root.
+const BASE = new URL('.', self.location).href;
+const p = (rel) => new URL(rel, BASE).href;
 const PRECACHE = [
-  '/',
-  '/index.html',
-  '/manifest.webmanifest',
-  '/favicon.svg',
-  '/icons/icon-192.svg',
-  '/icons/icon-512.svg',
-  '/icons/maskable-512.svg',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png',
-  '/icons/maskable-512.png',
-  '/icons/apple-touch-icon.png',
+  p('./'),
+  p('./index.html'),
+  p('./manifest.webmanifest'),
+  p('./favicon.svg'),
+  p('./icons/icon-192.svg'),
+  p('./icons/icon-512.svg'),
+  p('./icons/maskable-512.svg'),
+  p('./icons/icon-192.png'),
+  p('./icons/icon-512.png'),
+  p('./icons/maskable-512.png'),
+  p('./icons/apple-touch-icon.png'),
 ];
+const FALLBACK_INDEX = p('./index.html');
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -62,10 +67,10 @@ self.addEventListener('fetch', (event) => {
       fetch(request)
         .then((res) => {
           const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put('/index.html', copy));
+          caches.open(CACHE).then((c) => c.put(FALLBACK_INDEX, copy));
           return res;
         })
-        .catch(() => caches.match('/index.html'))
+        .catch(() => caches.match(FALLBACK_INDEX))
     );
     return;
   }
