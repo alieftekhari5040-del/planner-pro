@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import type { Task } from '../types';
+import { useEffect, useState } from 'react';
+import type { ScheduleRow, Task } from '../types';
 import { useStore } from '../store';
 import { uid } from '../lib/storage';
 import { faDigits } from '../lib/jalali';
@@ -37,9 +37,26 @@ function Checkbox({ checked, onToggle }: { checked: boolean; onToggle: () => voi
   );
 }
 
+const INITIAL_SCHEDULE_ROWS = 3;
+
+function starterSchedule(): ScheduleRow[] {
+  return Array.from({ length: INITIAL_SCHEDULE_ROWS }, () => ({
+    id: uid(),
+    time: '',
+    note: '',
+  }));
+}
+
 export default function TodayView({ iso }: { iso: string }) {
-  const { getDay, setDay } = useStore();
+  const { data, getDay, setDay } = useStore();
   const day = getDay(iso);
+
+  // A fresh date opens with the three useful rows shown in the reference design.
+  // Once a day exists, an intentionally emptied schedule stays empty.
+  useEffect(() => {
+    if (Object.prototype.hasOwnProperty.call(data.days, iso)) return;
+    setDay(iso, (d) => ({ ...d, schedule: starterSchedule() }));
+  }, [data.days, iso, setDay]);
 
   const upd = (fn: (d: NonNullable<typeof day>) => void) =>
     setDay(iso, (d) => {
@@ -78,14 +95,12 @@ export default function TodayView({ iso }: { iso: string }) {
             <EmptyState title="هنوز برنامه‌ای نداری" sub="ردیفی اضافه کن تا روزت را بسازی" />
           )}
           {day.schedule.map((row) => (
-            <div
-              key={row.id}
-              className="group-row flex items-center gap-2 rounded-xl border border-[#2d2d5e] bg-[#16163a]/50 p-2"
-            >
+            <div key={row.id} className="schedule-row group-row">
               <input
                 type="time"
                 lang="fa"
-                className="field w-28 shrink-0 text-center"
+                dir="ltr"
+                className="field schedule-time text-center"
                 value={row.time}
                 aria-label="ساعت"
                 onChange={(e) =>
@@ -96,8 +111,9 @@ export default function TodayView({ iso }: { iso: string }) {
                 }
               />
               <input
-                className="field flex-1"
-                placeholder="توضیح…"
+                dir="rtl"
+                className="field schedule-note"
+                placeholder="توضیح برنامه…"
                 value={row.note}
                 aria-label="یادداشت برنامه"
                 onChange={(e) =>
@@ -108,8 +124,9 @@ export default function TodayView({ iso }: { iso: string }) {
                 }
               />
               <button
-                className="row-delete text-lg"
+                className="row-delete schedule-delete text-lg"
                 aria-label="حذف ردیف"
+                title="حذف ردیف"
                 onClick={() =>
                   upd((d) => {
                     d.schedule = d.schedule.filter((x) => x.id !== row.id);

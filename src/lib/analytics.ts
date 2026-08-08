@@ -29,9 +29,9 @@ export function dayIsComplete(day: DayData | undefined): boolean {
 export function dayIsActive(day: DayData | undefined): boolean {
   if (!day) return false;
   return (
-    day.schedule.length > 0 ||
+    day.schedule.some((row) => row.time.length > 0 || row.note.trim().length > 0) ||
     day.tasks.some((t) => t.done) ||
-    day.goals.length > 0 ||
+    day.goals.some((goal) => goal.trim().length > 0) ||
     Object.values(day.habits).some(Boolean) ||
     day.lessons.trim().length > 0
   );

@@ -46,6 +46,21 @@ describe('dayIsActive', () => {
   it('active from goals', () => {
     expect(dayIsActive(day({ goals: ['go'] }))).toBe(true);
   });
+
+  it('ignores blank starter rows but detects a filled schedule row', () => {
+    const blank = {
+      ...day({}),
+      schedule: [
+        { id: 's1', time: '', note: '' },
+        { id: 's2', time: '', note: '   ' },
+      ],
+    };
+    expect(dayIsActive(blank)).toBe(false);
+    expect(dayIsActive({
+      ...blank,
+      schedule: [{ id: 's1', time: '08:30', note: '' }],
+    })).toBe(true);
+  });
 });
 
 describe('streaks', () => {

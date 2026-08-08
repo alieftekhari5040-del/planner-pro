@@ -184,6 +184,8 @@ h1, h2, h3, .fa-balance {
   font-size: 0.9rem;
   transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
   width: 100%;
+  /* Let fields shrink inside flex/grid layouts instead of pushing siblings out. */
+  min-width: 0;
 }
 .field::placeholder { color: var(--muted); opacity: 0.8; }
 .field:focus {
@@ -191,6 +193,33 @@ h1, h2, h3, .fa-balance {
   border-color: var(--border);
   box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.2), 0 0 16px rgba(124, 92, 255, 0.25);
   background: rgba(24, 24, 66, 0.9);
+}
+
+/* Daily schedule: fixed time track + fluid note + reserved delete action.
+   A grid avoids the old width:100% flex collision that made the time field
+   swallow the row and pushed the other controls outside the card. */
+.schedule-row {
+  display: grid;
+  grid-template-columns: 6.25rem minmax(0, 1fr) 1.25rem;
+  align-items: center;
+  gap: 0.5rem;
+  direction: rtl;
+}
+.schedule-time,
+.schedule-note {
+  width: 100%;
+}
+.schedule-time {
+  font-variant-numeric: tabular-nums;
+  unicode-bidi: isolate;
+}
+.schedule-delete {
+  justify-self: center;
+}
+@media (min-width: 640px) {
+  .schedule-row {
+    grid-template-columns: 7.25rem minmax(0, 1fr) 1.5rem;
+  }
 }
 
 /* Buttons */
